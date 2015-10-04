@@ -2,16 +2,26 @@
 var waffle = (function() {
 
     var waffle = {};
+	
+	waffle.cell = function() {
+		// TODO: This function should accept a D3 selector and append a cell 'rect' element
+		// This should be a 'reasonable' implementation that sets the x and y properties of
+		// the rect based on the cell properties in each datum.
+		
+		function my(values) {
+        }
+        
+        return my;
+	};
 
     waffle.row = function() {
         
         var my = {};
         
         var cellSize = 1,
+			cellSize_ = [1, 1],
             padding = null,
             padding_ = [0, 0],
-            round = Math.floor,
-            round_ = Math.floor,
             roundValue = Math.round,
             segmentPadding = null,
             segmentPadding_ = 0,
@@ -19,7 +29,9 @@ var waffle = (function() {
             
         my.cellSize = function(_) {
             if (!arguments.length) return cellSize;
-            cellSize = _;
+			cellSize = _;
+            cellSize_ = cellSize === null ? [1, 1] :
+						(Array.isArray(cellSize) ? cellSize : [+cellSize, +cellSize]);
             return my;
         };
         
@@ -28,13 +40,6 @@ var waffle = (function() {
             padding = _;
             padding_ = padding === null ? [0, 0] :
                       (Array.isArray(padding) ? padding : [+padding, +padding]);
-            return my;
-        };
-        
-        my.round = function(_) {
-            if (!arguments.length) return round;
-            round = _;
-            round_ = round ? round : function(d) { return d; };
             return my;
         };
         
@@ -68,8 +73,8 @@ var waffle = (function() {
             for (var i = 0; i < value; i++) {
                 result.push({ x: dx,
                               value: (value - i >= 1 ? 1 : value - i),
-                              width: cellSize, height: cellSize });
-                dx += padding_[1] + cellSize + padding_[0] +
+                              width: cellSize_[0], height: cellSize_[1] });
+                dx += padding_[1] + cellSize_[0] + padding_[0] +
                       ((i + 1) % segmentSize === 0 ? segmentPadding_ : 0);
             }
 
