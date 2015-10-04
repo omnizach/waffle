@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Waffle Logo</title>
+		<style>
+			.cell {
+				fill: #960;
+                stroke-width: 8px;
+                stroke: #fc0;
+                shape-rendering: crispEdges;
+			}
+            
+            .background {
+                fill: #ddd;
+            }
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 section" id="graphic"></div>
+			</div>
+		</div>
+        
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+		<script src="../src/waffle.js"></script>
+		<script>
+            var width = 256,
+                margin = width/16,
+                gridSize = 7;
+                
+            var svg = d3.select('#graphic')
+                        .append('svg')
+                        .attr('width', width)
+                        .attr('height', width);
+                        
+            svg.append('rect')
+               .classed('background', true)
+               .attr('width', width)
+               .attr('height', width)
+               .attr('x', 0)
+               .attr('y', 0);
+               
+            var w = waffle.quantile()
+                           .fillOrder('radial')
+                           .size([width-margin*2, width-margin*2])
+                           .gridSize([gridSize, gridSize]);
+            
+            svg.append('g')
+               .attr('transform', 'translate(' + margin + ',' + margin + ')')
+               .selectAll('.cell')
+               .data(w.cells())
+               .enter()
+                   .append('rect')
+                   .classed('cell', true)
+                   .attr('x', function(d) { return d.x; })
+                   .attr('y', function(d) { return d.y; })
+                   .attr('width', function(d) { return d.width; })
+                   .attr('height', function(d) { return d.height; })
+                   .attr('opacity', function(d, i) { return i >= 37 ? 0 : 1; });
+
+		</script>
+	</body>
+</html>
