@@ -19,7 +19,7 @@
 		<style>
 			.cell {
 				stroke: #000;
-				stroke-width: 2px;
+				stroke-width: 5px;
 			}
 		</style>
 	</head>
@@ -27,13 +27,30 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
-					<div id="slider"></div>
-					<br />
-					<br />
+					<h1>Waffle Quantile</h1>
 				</div>
 			</div>
 			<div class="row">
+				<br />
+				<br />
 				<div class="col-md-12 section" id="graphic"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div id="slider"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p>
+						This is an example of how to use the quantile function. By default, it produces a square of 10x10 
+						which can be colored to represent a percentage. Use the slider to set the percentage value. 
+					</p>
+					<p>
+						The color gradient shows the order of the squares. Each quadrant is filled in a different order so
+						that it's easy to read no matter what the value is set to.
+					</p>
+				</div>
 			</div>
 		</div>
 		
@@ -42,32 +59,19 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
 		<script src="../src/waffle.js"></script>
-        <script src="../src/cubehelix.js"></script>
+        <script src="cubehelix.js"></script>
 		<script>
 			$(function() {
 			
-                /*
 				var w = waffle.quantile()
-							   .padding(1)
-							   .quadrantPadding(1)
+							   .padding(4)
+							   .quadrantPadding(4)
 							   .fillOrder('quadrant')
 							   .orient('bottom-left')
-							   .size([150, 150]);
-                
-                //*/
-                //*
-                var w = waffle.bar()
-							   .padding(1)
-							   .segmentPadding(1)
-                               .width(10)
-                               .orient('horizontal')
-                               .align('outside')
-                               .segmentPadding([[1, 1], [2, 2]])
-							   .cellSize([10, 10])
-                               .initialOffset(6);
-                //*/
+							   .size([500, 500]);
+
                 var color = d3.scale.cubehelix()
-                            .domain([0, 200])
+                            .domain([0, 100])
                             .range([d3.hsl(276, .6, 0.25), d3.hsl(96, .6, 0.75)]);
 			
 				var svg = d3.select('#graphic')
@@ -77,7 +81,7 @@
                 
 				svg.append('g')
 				   .selectAll('.cell')
-				   .data(w.cells(163))
+				   .data(w.cells(63))
 				   .enter()
 				   .append('rect')
 				   .classed('cell', true)
@@ -87,23 +91,24 @@
 				   .attr('height', function(d) { return d.height; })
 				   .style('stroke-dasharray', function(d) { return (d.width+d.height) + ',' + (d.width+d.height); })
 				   .style('stroke-dashoffset', function(d) { return d.width+d.height; });
-							
+				
+				var cells = svg.selectAll('.cell');
+				
 				function updateWaffle(value) {
-					svg.selectAll('.cell')
-                       .attr('fill', function(d, i) { return i >= value ? '#000000' : color(i); });
+					cells.attr('fill', function(d, i) { return i >= value ? '#ffffff' : color(i); });
 				}
 				
 				$('#slider').slider({
 					min: 0,
-					max: 200,
+					max: 100,
 					step: 1,
-					value: 163,
+					value: 63,
 					slide: function(event, ui) {
 						updateWaffle(ui.value);
 					}
 				});
 				
-				updateWaffle(163);
+				updateWaffle(63);
 			});
 		</script>
 	</body>
